@@ -3,7 +3,7 @@ from pygame.draw import *
 from random import randint
 pygame.init()
 
-FPS = 0.5
+FPS = 1
 screen = pygame.display.set_mode((1200, 900))
 
 RED = (255, 0, 0)
@@ -14,6 +14,7 @@ MAGENTA = (255, 0, 255)
 CYAN = (0, 255, 255)
 BLACK = (0, 0, 0)
 COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
+counter, win_count = 0, 0
 
 def new_ball():
     global x, y, r
@@ -24,16 +25,26 @@ def new_ball():
     color = COLORS[randint(0, 5)]
     circle(screen, color, (x, y), r)
 
-# Функция сравнивает координаты шарика м мышки
+# Функция сравнивает координаты шарика м мышки, считает очки и процент попаданий
+# coordinate_x - x мыши
+# coordinate_y - y мыши
+# count - счётчик шаров
+# win_count - счётчик попаданий
+# win_percent - процент попаданий
 def click(event):
-    print(f"Координаты шара {x} {y} {r}")
+    global counter, win_count
     coordinate_x = event.pos[0]
     coordinate_y = event.pos[1]
-    print(f'{coordinate_x} x мыши,  {x} x шара, {coordinate_y} y мыши, {y} y шара, r')
     if (coordinate_x - x)**2 + (coordinate_y - y)**2 <= r**2:
-        print('Попал!')
+        win_count += 1
+        counter += 1
+        win_percent = win_count*100 / counter
+        print('Попал!', 'Процент попаданий',  win_percent, '%')
+
     elif (coordinate_x - x)**2 + (coordinate_y - y)**2 > r**2:
-        print('Мимо!')
+        counter += 1
+        win_percent = win_count * 100 / counter
+        print('Мимо!', 'Процент попаданий', win_percent, '%')
     else:
         print('Ошибка в функции click')
 
